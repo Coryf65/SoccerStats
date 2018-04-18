@@ -11,7 +11,9 @@ namespace SoccerStats
     {
         static void Main(string[] args) {
 
-            String currentDirectory = Directory.GetCurrentDirectory(); //Grabs the current Directory
+            //String currentDirectory = Directory.GetCurrentDirectory(); //Grabs the current Directory
+
+            string currentDirectory = "C:\\Users\\cfabi\\source\\repos\\SoccerStats";
 
             DirectoryInfo directory = new DirectoryInfo(currentDirectory);
 
@@ -20,7 +22,17 @@ namespace SoccerStats
 
             var fileContents = ReadFile(fileName);
 
-            Console.WriteLine(fileContents);
+            string[] fileLines = fileContents.Split(new char[] { '\r', '\n' });
+            
+            //OR you could also use this overload if you get empty lines BELOW
+            string[] fileLinesNoEmpty = fileContents.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var line in fileLines)
+            {
+
+                Console.WriteLine(line);
+            }
+
 
         }
 
