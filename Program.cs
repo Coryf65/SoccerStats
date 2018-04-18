@@ -40,12 +40,25 @@ namespace SoccerStats
             using (var reader = new StreamReader(fileName))
             {
                 string line = "";
+                reader.ReadLine(); //This gets rid of the headers which we don't care about
 
                 //peek looks at the char in the next position and returns an int, if the int is "-1" the we hit the end of a line
                 while ((line = reader.ReadLine()) != null)
                 {
                     //
+                    var gameResult = new GameResult();
+
                     string[] values = line.Split(','); //we split because all of the data is seperated by an ","
+
+                    //gameResult.GameDate = DateTime.Parse([0]); //we could get an not valid date which will throw an exception
+
+                    DateTime gameDate;
+
+                    if (DateTime.TryParse(values[0], out gameDate)) //if the try is not successful it will just skip it!
+                    {
+                        gameResult.GameDate = gameDate;
+                    }
+                  
                     soccerResults.Add(values);
                 }
 
