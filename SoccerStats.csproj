@@ -46,6 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="SoccerGameResults.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
