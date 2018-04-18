@@ -20,19 +20,7 @@ namespace SoccerStats
             // using combine will add slashes for us if they are missing, this will hold the file name
             var fileName = Path.Combine(directory.FullName, "SoccerGameResults.csv");
 
-            var fileContents = ReadFile(fileName);
-
-            string[] fileLines = fileContents.Split(new char[] { '\r', '\n' });
-            
-            //OR you could also use this overload if you get empty lines BELOW
-            string[] fileLinesNoEmpty = fileContents.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (var line in fileLines)
-            {
-
-                Console.WriteLine(line);
-            }
-
+            var fileContents = ReadSoccerResults(fileName);
 
         }
 
@@ -51,12 +39,14 @@ namespace SoccerStats
 
             using (var reader = new StreamReader(fileName))
             {
+                string line = "";
 
                 //peek looks at the char in the next position and returns an int, if the int is "-1" the we hit the end of a line
-                while (reader.Peek() > -1)
+                while ((line = reader.ReadLine()) != null)
                 {
-                    string[] line = reader.ReadLine().Split(','); //we split because all of the data is seperated by an ","
-                    soccerResults.Add(line);
+                    //
+                    string[] values = line.Split(','); //we split because all of the data is seperated by an ","
+                    soccerResults.Add(values);
                 }
 
             }
