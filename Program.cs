@@ -34,7 +34,7 @@ namespace SoccerStats
         }
 
         public static List<string[]> ReadSoccerResults(string fileName) {
-
+            //now we changed the return type to be a object instead of List<string[]>
             var soccerResults = new List<string[]>();
 
             using (var reader = new StreamReader(fileName))
@@ -54,11 +54,23 @@ namespace SoccerStats
 
                     DateTime gameDate;
 
-                    if (DateTime.TryParse(values[0], out gameDate)) //if the try is not successful it will just skip it!
+                    if (DateTime.TryParse(values[0], out gameDate)) //This out is a temporary var that gets stored, so what we pass does not have top be initialized
+
+                    /*
+                     * The out parameter modifier keyword is used to pass a value type argument by reference, 
+                     * and while the argument doesn’t have to be initialized before it’s passed to the method parameter, 
+                     * the method does have to assign a value to the argument before it returns..
+                     */
                     {
                         gameResult.GameDate = gameDate;
                     }
-                  
+                    gameResult.TeamName = values[1];
+                    //parse the enum
+                    HomeOrAway homeOrAway;
+                    if (Enum.TryParse(values[2], out homeOrAway))
+                    {
+                        gameResult.HomeOrAway = homeOrAway;
+                    }
                     soccerResults.Add(values);
                 }
 

@@ -14,5 +14,17 @@ namespace SoccerStats
         // hold a reference to that object and not the actual data
         public DateTime GameDate { get; set; }
 
+        public string TeamName { get; set; }
+
+        public HomeOrAway HomeOrAway { get; set; }
+
+
+
+    }
+
+    public enum HomeOrAway
+    {
+        Home, //
+        Away  // you can also set the backing value ie. Home = 20,
     }
 }
