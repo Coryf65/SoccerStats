@@ -44,5 +44,24 @@ namespace SoccerStats
             }
 
         }
+
+        public static List<string[]> ReadSoccerResults(string fileName) {
+
+            var soccerResults = new List<string[]>();
+
+            using (var reader = new StreamReader(fileName))
+            {
+
+                //peek looks at the char in the next position and returns an int, if the int is "-1" the we hit the end of a line
+                while (reader.Peek() > -1)
+                {
+                    string[] line = reader.ReadLine().Split(','); //we split because all of the data is seperated by an ","
+                    soccerResults.Add(line);
+                }
+
+            }
+
+                return soccerResults;
+        }
     }
 }
