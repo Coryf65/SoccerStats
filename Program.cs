@@ -87,6 +87,15 @@ namespace SoccerStats
                         gameResult.ShotsOffGoal = parseInt;
                     }
 
+                    double possessionPercent;
+
+                    if (double.TryParse(values[7], out possessionPercent))
+                    {
+                        gameResult.PossessionPercent = possessionPercent;
+                    }
+
+                    //gameResult.ConversionRate = (double)gameResult.Goals / gameResult.GoalAttempts; OR calculate when storing ! in the GameResult class                    
+
                     soccerResults.Add(values);
                 }
 

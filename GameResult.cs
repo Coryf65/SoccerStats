@@ -26,14 +26,24 @@ namespace SoccerStats
 
         public int ShotsOffGoal { get; set; }
 
+        public double PossessionPercent { get; set; }
 
-
+        //we are now going to add a conversion rate by looking at our data Goals/Attempts
+        // this uses less memory calculating here and also cannot be overwritten
+        // good practice to use calculation in the properties when possible
+        public double ConversionRate
+        {
+            get
+            {
+               return (double)Goals / (double)GoalAttempts; //must cast the ints into doubles
+            }
+        }
 
     }
 
     public enum HomeOrAway
     {
-        Home, //
+        Home, 
         Away  // you can also set the backing value ie. Home = 20,
     }
 }
