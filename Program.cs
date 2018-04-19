@@ -40,37 +40,53 @@ namespace SoccerStats
             using (var reader = new StreamReader(fileName))
             {
                 string line = "";
-                reader.ReadLine(); //This gets rid of the headers which we don't care about
-
-                //peek looks at the char in the next position and returns an int, if the int is "-1" the we hit the end of a line
+                reader.ReadLine(); 
+                
                 while ((line = reader.ReadLine()) != null)
                 {
                     //
                     var gameResult = new GameResult();
 
-                    string[] values = line.Split(','); //we split because all of the data is seperated by an ","
-
-                    //gameResult.GameDate = DateTime.Parse([0]); //we could get an not valid date which will throw an exception
-
+                    string[] values = line.Split(',');
+           
                     DateTime gameDate;
 
-                    if (DateTime.TryParse(values[0], out gameDate)) //This out is a temporary var that gets stored, so what we pass does not have top be initialized
-
-                    /*
-                     * The out parameter modifier keyword is used to pass a value type argument by reference, 
-                     * and while the argument doesn’t have to be initialized before it’s passed to the method parameter, 
-                     * the method does have to assign a value to the argument before it returns..
-                     */
+                    if (DateTime.TryParse(values[0], out gameDate))         
                     {
                         gameResult.GameDate = gameDate;
                     }
                     gameResult.TeamName = values[1];
+                    
                     //parse the enum
                     HomeOrAway homeOrAway;
+
                     if (Enum.TryParse(values[2], out homeOrAway))
                     {
                         gameResult.HomeOrAway = homeOrAway;
                     }
+
+                    int parseInt;
+
+                    if (int.TryParse(values[3], out parseInt))
+                    {
+                        gameResult.Goals = parseInt;
+                    }
+
+                    if (int.TryParse(values[4], out parseInt))
+                    {
+                        gameResult.GoalAttempts = parseInt;
+                    }
+
+                    if (int.TryParse(values[5], out parseInt))
+                    {
+                        gameResult.ShotsOnGoal = parseInt;
+                    }
+
+                    if (int.TryParse(values[6], out parseInt))
+                    {
+                        gameResult.ShotsOffGoal = parseInt;
+                    }
+
                     soccerResults.Add(values);
                 }
 
