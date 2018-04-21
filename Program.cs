@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace SoccerStats
 {
@@ -13,7 +14,8 @@ namespace SoccerStats
 
             //String currentDirectory = Directory.GetCurrentDirectory(); //Grabs the current Directory
 
-            string currentDirectory = "C:\\Users\\cfabi\\source\\repos\\SoccerStats";
+            //Local Path into the CSV file
+            string currentDirectory = "C:\\Users\\cory\\source\\repos\\SoccerStats";
 
             DirectoryInfo directory = new DirectoryInfo(currentDirectory);
 
@@ -21,6 +23,16 @@ namespace SoccerStats
             var fileName = Path.Combine(directory.FullName, "SoccerGameResults.csv");
 
             var fileContents = ReadSoccerResults(fileName);
+
+            fileName = Path.Combine(directory.FullName, "Players.json");
+
+            var players = DeserializePlayers(fileName);
+
+            //testing to see if we are successful
+            foreach (var player in players)
+            {
+                Console.WriteLine(player.second_name);
+            }
 
         }
 
@@ -103,5 +115,20 @@ namespace SoccerStats
 
                 return soccerResults;
         }
+
+        public static List<Player> DeserializePlayers(string fileName)
+        {
+            var players = new List<Player>();
+            var serializer = new JsonSerializer();
+
+            using (var reader = new StreamReader(fileName))
+            using (var jsonReader = new JsonTextReader(reader))
+            {
+                serializer.Deserialize<List<Player>>(jsonReader);
+            }
+
+            return players;
+        }
+
     }
 }
