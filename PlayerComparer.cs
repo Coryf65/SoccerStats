@@ -12,25 +12,28 @@ namespace SoccerStats
         {
 
             // OR use built in functionality
-            return (x.PointsPerGame.CompareTo(y.PointsPerGame));
-           
+            //return (x.PointsPerGame.CompareTo(y.PointsPerGame));
+
+            // made it desc 
+            return (x.PointsPerGame.CompareTo(y.PointsPerGame)) * -1;
 
 
-         // One way to compare (custom made)
-         //   if (x.PointsPerGame < y.PointsPerGame)
-         //   {
-         //       return -1;
-         //   }
-         //   else if (x.PointsPerGame == y.PointsPerGame)
-         //   {
-         //       return 0;
-         //   }
-         //   else if (x.PointsPerGame > y.PointsPerGame)
-	        //{
-         //       return 1;
-         //   }
 
-         //   return 0;
+            // One way to compare (custom made)
+            //   if (x.PointsPerGame < y.PointsPerGame)
+            //   {
+            //       return -1;
+            //   }
+            //   else if (x.PointsPerGame == y.PointsPerGame)
+            //   {
+            //       return 0;
+            //   }
+            //   else if (x.PointsPerGame > y.PointsPerGame)
+            //{
+            //       return 1;
+            //   }
+
+            //   return 0;
         }
     }
 }

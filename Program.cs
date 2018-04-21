@@ -138,6 +138,8 @@ namespace SoccerStats
             //create a list to store the top 10
             var topTenPlayers = new List<Player>();
 
+            players.Sort(new PlayerComparer());
+            
             //counter
             int counter = 0;
 
@@ -152,12 +154,9 @@ namespace SoccerStats
                     break;
                 }
 
-                return topTenPlayers;
             }
-
-            players.Sort(new PlayerComparer());
-
-            return players;
+                return topTenPlayers;
+      
         }
 
     }
