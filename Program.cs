@@ -124,7 +124,7 @@ namespace SoccerStats
             using (var reader = new StreamReader(fileName))
             using (var jsonReader = new JsonTextReader(reader))
             {
-                serializer.Deserialize<List<Player>>(jsonReader);
+                players = serializer.Deserialize<List<Player>>(jsonReader);
             }
 
             return players;
