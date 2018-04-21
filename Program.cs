@@ -11,11 +11,11 @@ namespace SoccerStats
     class Program
     {
         static void Main(string[] args) {
-
-            //String currentDirectory = Directory.GetCurrentDirectory(); //Grabs the current Directory
+            
 
             //Local Path into the CSV file
-            string currentDirectory = "C:\\Users\\cory\\source\\repos\\SoccerStats";
+            string currentDirectory = "C:\\Users\\cory\\source\\repos\\SoccerStats";  //Hard code directory
+            //String currentDirectory = Directory.GetCurrentDirectory();                  //Grabs the current Directory
 
             DirectoryInfo directory = new DirectoryInfo(currentDirectory);
 
@@ -24,14 +24,17 @@ namespace SoccerStats
 
             var fileContents = ReadSoccerResults(fileName);
 
-            fileName = Path.Combine(directory.FullName, "Players.json");
+            fileName = Path.Combine(directory.FullName, "players.json");
 
             var players = DeserializePlayers(fileName);
+            //store the top ten
+            var topTenPlayers = GetTopTenPlayers(players); 
+
 
             //testing to see if we are successful
-            foreach (var player in players)
+            foreach (var player in topTenPlayers)
             {
-                Console.WriteLine(player.FirstName);
+                Console.WriteLine("Name: " + player.FirstName + " PPG: " + player.PointsPerGame);
             }
 
         }
@@ -126,6 +129,33 @@ namespace SoccerStats
             {
                 players = serializer.Deserialize<List<Player>>(jsonReader);
             }
+
+            return players;
+        }
+
+        public static List<Player> GetTopTenPlayers(List<Player> players)
+        {
+            //create a list to store the top 10
+            var topTenPlayers = new List<Player>();
+
+            //counter
+            int counter = 0;
+
+            foreach (var player in players)
+            {
+                topTenPlayers.Add(player);
+
+                counter++;
+
+                if (counter == 10)
+                {
+                    break;
+                }
+
+                return topTenPlayers;
+            }
+
+            players.Sort(new PlayerComparer());
 
             return players;
         }
