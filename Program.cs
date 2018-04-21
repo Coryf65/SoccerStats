@@ -31,7 +31,7 @@ namespace SoccerStats
             //testing to see if we are successful
             foreach (var player in players)
             {
-                Console.WriteLine(player.second_name);
+                Console.WriteLine(player.FirstName);
             }
 
         }
