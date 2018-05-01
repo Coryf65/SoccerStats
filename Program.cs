@@ -5,40 +5,61 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace SoccerStats
 {
     class Program
     {
         static void Main(string[] args) {
-            
-
-            //Local Path into the CSV file
-            string currentDirectory = "C:\\Users\\cory\\source\\repos\\SoccerStats";  //Hard code directory
-            //String currentDirectory = Directory.GetCurrentDirectory();                  //Grabs the current Directory
-
-            DirectoryInfo directory = new DirectoryInfo(currentDirectory);
-
-            // using combine will add slashes for us if they are missing, this will hold the file name
-            var fileName = Path.Combine(directory.FullName, "SoccerGameResults.csv");
-
-            var fileContents = ReadSoccerResults(fileName);
-
-            fileName = Path.Combine(directory.FullName, "players.json");
-
-            var players = DeserializePlayers(fileName);
-            //store the top ten
-            var topTenPlayers = GetTopTenPlayers(players); 
 
 
-            //testing to see if we are successful
-            foreach (var player in topTenPlayers)
-            {
-                Console.WriteLine("Name: " + player.FirstName + " PPG: " + player.PointsPerGame);
-            }
+            /*  NOTES:
+             * 
+             *  Many different ways to get web requests this is one example
+             *  
+             *  WebRequest
+             *  https://msdn.microsoft.com/en-us/library/system.net.webrequest.aspx
+             *  
+             *  HttpClient
+             *  https://msdn.microsoft.com/en-us/library/system.net.http.httpclient.aspx
+             *  
+             *  WebClient
+             *  https://msdn.microsoft.com/en-us/library/system.net.webclient.aspx
+             *  
+             *  abstract modifier
+             *  https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/abstract
+             *  
+             */
 
-            fileName = Path.Combine(directory.FullName, "topten.json");
-            SerializePlayersToFile(topTenPlayers, fileName);
+
+            ////Local Path into the CSV file
+            //string currentDirectory = "C:\\Users\\cory\\source\\repos\\SoccerStats";  //Hard code directory
+            ////String currentDirectory = Directory.GetCurrentDirectory();                  //Grabs the current Directory
+
+            //DirectoryInfo directory = new DirectoryInfo(currentDirectory);
+
+            //// using combine will add slashes for us if they are missing, this will hold the file name
+            //var fileName = Path.Combine(directory.FullName, "SoccerGameResults.csv");
+
+            //var fileContents = ReadSoccerResults(fileName);
+
+            //fileName = Path.Combine(directory.FullName, "players.json");
+
+            //var players = DeserializePlayers(fileName);
+            ////store the top ten
+            //var topTenPlayers = GetTopTenPlayers(players); 
+
+
+            ////testing to see if we are successful
+            //foreach (var player in topTenPlayers)
+            //{
+            //    Console.WriteLine("Name: " + player.FirstName + " PPG: " + player.PointsPerGame);
+            //}
+
+            //fileName = Path.Combine(directory.FullName, "topten.json");
+            //SerializePlayersToFile(topTenPlayers, fileName);
+            Console.WriteLine(GetGoolgeHomePage());
 
         }
 
@@ -175,6 +196,20 @@ namespace SoccerStats
                 serialize.Serialize(jsonWriter, players);
             }
 
+        }
+
+        public static string GetGoolgeHomePage()
+        {
+            var webClient = new WebClient();
+
+            byte[] googleHome = webClient.DownloadData("https://Google.com");
+
+            using (var stream = new MemoryStream(googleHome))
+            using (var reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+                    
         }
 
            
