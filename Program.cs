@@ -200,13 +200,18 @@ namespace SoccerStats
 
         public static string GetGoolgeHomePage()
         {
+            //using the web clients class
             var webClient = new WebClient();
 
+            //it gives us a byte array so we put it into one
             byte[] googleHome = webClient.DownloadData("https://Google.com");
 
+            // in order to get all of the info out we are using a stream passing in a byte array
             using (var stream = new MemoryStream(googleHome))
+                //pass in our stream then read it (VAR keyword can be much faster when the type is clear)
             using (var reader = new StreamReader(stream))
             {
+                //return the goods
                 return reader.ReadToEnd();
             }
                     
