@@ -59,8 +59,9 @@ namespace SoccerStats
 
             //fileName = Path.Combine(directory.FullName, "topten.json");
             //SerializePlayersToFile(topTenPlayers, fileName);
-            Console.WriteLine(GetGoolgeHomePage());
 
+            //   Console.WriteLine(GetGoolgeHomePage());
+            Console.WriteLine(GetNewsForPlayer("Diego Valeri"));
         }
 
         public static string ReadFile(string fileName) {
@@ -217,7 +218,28 @@ namespace SoccerStats
                     
         }
 
-           
+        public static string GetNewsForPlayer(string playerName)
+        {
+            //using the web clients class
+            var webClient = new WebClient();
+
+            webClient.Headers.Add("Ocp-Apim-Subscription-Key", "513a020e3b084e76bc5f9ba1c67db2e6");
+
+            //it gives us a byte array so we put it into one
+            byte[] searchResults = webClient.DownloadData(string.Format("https://api.cognitive.microsoft.com/bing/v7.0/search?q={0}", playerName));
+
+            // in order to get all of the info out we are using a stream passing in a byte array
+            using (var stream = new MemoryStream(searchResults))
+            //pass in our stream then read it (VAR keyword can be much faster when the type is clear)
+            using (var reader = new StreamReader(stream))
+            {
+                //return the goods
+                return reader.ReadToEnd();
+            }
+
+        }
+
+
 
     }
 }
