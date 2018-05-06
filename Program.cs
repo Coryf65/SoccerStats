@@ -33,35 +33,48 @@ namespace SoccerStats
              */
 
 
-            ////Local Path into the CSV file
-            //string currentDirectory = "C:\\Users\\cory\\source\\repos\\SoccerStats";  //Hard code directory
-            ////String currentDirectory = Directory.GetCurrentDirectory();                  //Grabs the current Directory
+            //Local Path into the CSV file
+            string currentDirectory = "C:\\Users\\cory\\source\\repos\\SoccerStats";  //Hard code directory
+            //String currentDirectory = Directory.GetCurrentDirectory();                  //Grabs the current Directory
 
-            //DirectoryInfo directory = new DirectoryInfo(currentDirectory);
+            DirectoryInfo directory = new DirectoryInfo(currentDirectory);
 
-            //// using combine will add slashes for us if they are missing, this will hold the file name
-            //var fileName = Path.Combine(directory.FullName, "SoccerGameResults.csv");
+            // using combine will add slashes for us if they are missing, this will hold the file name
+            var fileName = Path.Combine(directory.FullName, "SoccerGameResults.csv");
 
-            //var fileContents = ReadSoccerResults(fileName);
+            var fileContents = ReadSoccerResults(fileName);
 
-            //fileName = Path.Combine(directory.FullName, "players.json");
+            fileName = Path.Combine(directory.FullName, "players.json");
 
-            //var players = DeserializePlayers(fileName);
-            ////store the top ten
-            //var topTenPlayers = GetTopTenPlayers(players); 
+            var players = DeserializePlayers(fileName);
+            //store the top ten
+            var topTenPlayers = GetTopTenPlayers(players);
 
 
-            ////testing to see if we are successful
-            //foreach (var player in topTenPlayers)
-            //{
-            //    Console.WriteLine("Name: " + player.FirstName + " PPG: " + player.PointsPerGame);
-            //}
+            //testing to see if we are successful
+            foreach (var player in topTenPlayers)
+            {
+                //Console.WriteLine("Name: " + player.FirstName + " PPG: " + player.PointsPerGame);
 
-            //fileName = Path.Combine(directory.FullName, "topten.json");
-            //SerializePlayersToFile(topTenPlayers, fileName);
+                List<NewsResult> newsResults = GetNewsForPlayer(string.Format("{0} {1}", player.FirstName, player.LastName));
 
-            //   Console.WriteLine(GetGoolgeHomePage());
-            Console.WriteLine(GetNewsForPlayer("Diego Valeri"));
+                foreach (var result in newsResults)
+                {
+                    //replace the nums with the index of the object
+                    Console.WriteLine(string.Format("Date: {0:f}, Headline: {1}, Summary: {2} \r\n", result.DatePublished, result.Headline, result.Summary));
+                    // so we can test one at a time
+                    Console.ReadKey();
+                }
+            }
+
+            fileName = Path.Combine(directory.FullName, "topten.json");
+            SerializePlayersToFile(topTenPlayers, fileName);
+
+            // Prints the results of this function to the console
+            //Console.WriteLine(GetGoolgeHomePage());
+
+            // Uses Bing API to search news about this "player"
+            //Console.WriteLine(GetNewsForPlayer("Diego Valeri"));
         }
 
         public static string ReadFile(string fileName) {
@@ -73,9 +86,11 @@ namespace SoccerStats
 
         }
 
-        public static List<string[]> ReadSoccerResults(string fileName) {
+        public static List<GameResult> ReadSoccerResults(string fileName) {
             //now we changed the return type to be a object instead of List<string[]>
-            var soccerResults = new List<string[]>();
+            //var soccerResults = new List<string[]>();
+
+            var soccerResults = new List<GameResult>();
 
             using (var reader = new StreamReader(fileName))
             {
@@ -136,7 +151,7 @@ namespace SoccerStats
 
                     //gameResult.ConversionRate = (double)gameResult.Goals / gameResult.GoalAttempts; OR calculate when storing ! in the GameResult class                    
 
-                    soccerResults.Add(values);
+                    soccerResults.Add(gameResult);
                 }
 
             }
@@ -218,24 +233,30 @@ namespace SoccerStats
                     
         }
 
-        public static string GetNewsForPlayer(string playerName)
+        public static List<NewsResult> GetNewsForPlayer(string playerName)
         {
+            var results = new List<NewsResult>();
+
             //using the web clients class
             var webClient = new WebClient();
 
-            webClient.Headers.Add("Ocp-Apim-Subscription-Key", "513a020e3b084e76bc5f9ba1c67db2e6");
+            webClient.Headers.Add("Ocp-Apim-Subscription-Key", "");
 
             //it gives us a byte array so we put it into one
-            byte[] searchResults = webClient.DownloadData(string.Format("https://api.cognitive.microsoft.com/bing/v7.0/search?q={0}", playerName));
+            byte[] searchResults = webClient.DownloadData(string.Format("https://api.cognitive.microsoft.com/bing/v7.0/news?{0}", playerName));
+
+            //JSON Serialzer
+            var serialize = new JsonSerializer();
 
             // in order to get all of the info out we are using a stream passing in a byte array
             using (var stream = new MemoryStream(searchResults))
             //pass in our stream then read it (VAR keyword can be much faster when the type is clear)
             using (var reader = new StreamReader(stream))
+            using (var jsonReader = new JsonTextReader(reader))
             {
-                //return the goods
-                return reader.ReadToEnd();
+                results = serialize.Deserialize<NewsSearch>(jsonReader).NewsResults;
             }
+            return results;
 
         }
 
