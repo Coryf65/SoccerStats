@@ -240,7 +240,7 @@ namespace SoccerStats
             //using the web clients class
             var webClient = new WebClient();
 
-            webClient.Headers.Add("Ocp-Apim-Subscription-Key", "");
+            webClient.Headers.Add("Ocp-Apim-Subscription-Key", "Fill in your API key here"); //   Fill in your API key here !!!!!!!!
 
             //it gives us a byte array so we put it into one
             byte[] searchResults = webClient.DownloadData(string.Format("https://api.cognitive.microsoft.com/bing/v7.0/news?{0}", playerName));
